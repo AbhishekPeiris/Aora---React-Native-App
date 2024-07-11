@@ -1,4 +1,4 @@
-import { Client } from 'react-native-appwrite';
+import { Account, Client, ID } from 'react-native-appwrite';
 
 export const config = {
     endpoint: 'https://cloud.appwrite.io/v1',
