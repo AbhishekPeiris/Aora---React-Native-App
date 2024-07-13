@@ -70,20 +70,20 @@ export const createUser = async (email, password, username) => {
 
 export async function signIn(email, password) {
     try {
-      const session = await account.createEmailSession(email, password);
-  
-      return session;
+        const session = await account.createEmailSession(email, password);
+
+        return session;
     } catch (error) {
-      throw new Error(error);
+        throw new Error(error);
     }
-  }
+}
 
 export const getCurrentUser = async () => {
     try {
 
-        const currentAccount  = await account.get();
+        const currentAccount = await account.get();
 
-        if(!currentAccount) throw Error;
+        if (!currentAccount) throw Error;
 
         const currentUser = await databases.listDocuments(
             config.databaseId,
@@ -91,10 +91,10 @@ export const getCurrentUser = async () => {
             [Query.equal('accountId', currentAccount.$id)]
         )
 
-        if(!currentUser) throw Error;
+        if (!currentUser) throw Error;
 
         return currentUser.documents[0];
-        
+
     } catch (error) {
         console.log(error);
     }
@@ -107,7 +107,21 @@ export const getAllPosts = async () => {
             videoCollectionId
         )
         return posts.documents;
-        
+
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+export const getLatesPosts = async () => {
+    try {
+        const posts = await databases.listDocuments(
+            databaseId,
+            videoCollectionId,
+            [Query.orderDesc("$createdAt"), Query.limit(7)]
+        )
+        return posts.documents;
+
     } catch (error) {
         throw new Error(error);
     }
