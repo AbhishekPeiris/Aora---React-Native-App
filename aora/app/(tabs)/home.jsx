@@ -2,12 +2,15 @@ import { View, Text, SafeAreaView, FlatList, Image } from 'react-native'
 import React from 'react'
 import { images } from '../../constants'
 import SearchInput from '../../components/SearchInput'
+import Trending from '../../components/Trending'
+import EmptyState from '../../components/EmptyState'
 
 const Home = () => {
   return (
     <SafeAreaView className="bg-primary">
       <FlatList 
-        data={[{ id: 1 }, { id: 2 }, { id: 3}]}
+        //data={[{ id: 1 }, { id: 2 }, { id: 3}]}
+        data={[]}
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => (
           <Text className="text-3xl text-white">{item.id}</Text>
@@ -32,7 +35,19 @@ const Home = () => {
               </View>
             </View>
             <SearchInput />
+            <View className="w-full flex-1 pt-5 pb-8">
+              <Text className="text-gray-100 text-lg font-pregular mb-3">
+                Latest Videos
+              </Text>
+              <Trending posts={[{ id: 1 }, { id: 2 }, { id: 3}] ?? []} />
+            </View>
           </View>
+        )}
+        ListEmptyComponent={() => (
+          <EmptyState 
+            title="No Videos Found"
+            subtitle="Be the first one to upload a video"
+          />
         )}
       />
     </SafeAreaView>
