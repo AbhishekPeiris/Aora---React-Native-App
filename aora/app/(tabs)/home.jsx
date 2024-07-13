@@ -9,25 +9,25 @@ import useAppwrite from '../../lib/useAppwrite'
 
 const Home = () => {
 
-  const { data: posts} = useAppwrite(getAllPosts);
+  const { data: posts, refetch } = useAppwrite(getAllPosts);
 
   const [refreshing, setRefreshing] = useState(false);
  
   const onRefresh = async () => {
     setRefreshing(true);
-    // re call videos -> if any new video appeard
+    await refetch();
     setRefreshing(false);
-  }
+  };
 
   console.log(posts);
 
   return (
     <SafeAreaView className="bg-primary h-full">
       <FlatList 
-        data={[{ id: 1 }, { id: 2 }, { id: 3}]}
+        data={posts}
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => (
-          <Text className="text-3xl text-white">{item.id}</Text>
+          <Text className="text-3xl text-white">{item.title}</Text>
         )}
         ListHeaderComponent={() => (
           <View className="my-6 px-4 space-y-6">
