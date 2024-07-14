@@ -4,23 +4,28 @@ import { icons, images } from '../../constants'
 import SearchInput from '../../components/SearchInput'
 import Trending from '../../components/Trending'
 import EmptyState from '../../components/EmptyState'
-import { getAllPosts, getLatesPosts, getUserPost, searchPosts } from '../../lib/appwrite'
+import { getAllPosts, getLatesPosts, getUserPost, searchPosts, signOut } from '../../lib/appwrite'
 import useAppwrite from '../../lib/useAppwrite'
 import VideoCard from '../../components/VideoCard'
 import { useLocalSearchParams } from 'expo-router'
 import { useGlobalContext } from '../../context/GlobalProvider'
 import InfoBox from '../../components/InfoBox'
+import { router } from 'expo-router'
 
 const Profile = () => {
 
-  const { user, setUser, setIsLoggedIn } = useGlobalContext();
+  const { user, setUser, setIsLogged } = useGlobalContext();
   const { data: posts } = useAppwrite(
     () => getUserPost(user.$id)
   );
 
-  const logout = () => {
+  const logout = async () => {
+    await signOut();
+    setUser(null);
+    setIsLogged(false);
 
-  }
+    router.replace("/sign-in");
+  };
 
   return (
     <SafeAreaView className="bg-primary h-full">
