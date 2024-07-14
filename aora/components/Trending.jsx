@@ -24,7 +24,7 @@ const zoomOut = {
 
 const TrendingItem = ({ activeItem, item }) => {
 
-  const [play , setPlay] = useState(false);
+  const [play, setPlay] = useState(false);
 
   console.log(activeItem.$id, item.$id)
 
@@ -35,14 +35,14 @@ const TrendingItem = ({ activeItem, item }) => {
       duration={500}
     >
       {play ? (
-        <Video 
+        <Video
           source={{ uri: item.video }}
-          className="w-52 h-72 rounded-[35px] mt-3 bg-white/10"
+          className="w-52 h-72 rounded-[33px] mt-3 bg-white/10"
           resizeMode={ResizeMode.CONTAIN}
           useNativeControls
           shouldPlay
           onPlaybackStatusUpdate={(status) => {
-            if(status.didJustFinish) {
+            if (status.didJustFinish) {
               setPlay(false);
             }
           }}
@@ -53,7 +53,7 @@ const TrendingItem = ({ activeItem, item }) => {
           activeOpacity={0.7}
           onPress={() => setPlay(true)}
         >
-          <ImageBackground 
+          <ImageBackground
             source={{
               uri: item.thumbnail
             }}
@@ -61,7 +61,7 @@ const TrendingItem = ({ activeItem, item }) => {
             shadow-lg shadow-black/40"
             resizeMode='cover'
           />
-          <Image 
+          <Image
             source={icons.play}
             className="w-12 h-12 absolute"
             resizeMode='contain'
