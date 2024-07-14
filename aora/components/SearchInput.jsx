@@ -3,10 +3,10 @@ import React, { useState } from 'react'
 import { icons } from '../constants'
 import { router, usePathname } from 'expo-router'
 
-const SearchInput = ({ title, value, placeholder, handleChangeText, otherStyles, ...props }) => {
+const SearchInput = ({ initialQuery }) => {
 
     const pathname = usePathname()
-    const [query, setQuery] = useState('')
+    const [query, setQuery] = useState(initialQuery || '')
 
   return (
     

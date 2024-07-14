@@ -127,16 +127,18 @@ export const getLatesPosts = async () => {
     }
 }
 
-export const searchPosts = async (query) => {
+export async function searchPosts(query) {
     try {
-        const posts = await databases.listDocuments(
-            databaseId,
-            videoCollectionId,
-            [Query.search("title", query)]
-        )
-        return posts.documents;
-
+      const posts = await databases.listDocuments(
+        databaseId,
+        videoCollectionId,
+        [Query.search("title", query)]
+      );
+  
+      if (!posts) throw new Error("Something went wrong");
+  
+      return posts.documents;
     } catch (error) {
-        throw new Error(error);
+      throw new Error(error);
     }
-}
+  }
