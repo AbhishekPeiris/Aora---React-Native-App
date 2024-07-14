@@ -158,3 +158,13 @@ export const getUserPost = async (userId) => {
       throw new Error(error);
     }
 }
+
+export async function signOut() {
+    try {
+      const session = await account.deleteSession("current");
+  
+      return session;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
