@@ -141,4 +141,20 @@ export async function searchPosts(query) {
     } catch (error) {
       throw new Error(error);
     }
-  }
+}
+
+export const getUserPost = async (userId) => {
+    try {
+      const posts = await databases.listDocuments(
+        databaseId,
+        videoCollectionId,
+        [Query.equal("creator", userId)]
+      );
+  
+      if (!posts) throw new Error("Something went wrong");
+  
+      return posts.documents;
+    } catch (error) {
+      throw new Error(error);
+    }
+}
