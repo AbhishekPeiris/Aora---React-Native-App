@@ -5,6 +5,7 @@ import CustomButton from '../../components/CustomButton';
 import { Video, ResizeMode } from 'expo-av'
 import { icons } from '../../constants';
 import * as DocumentPicker from 'expo-document-picker'
+import { router } from 'expo-router'
 
 const Create = () => {
 
@@ -19,18 +20,18 @@ const Create = () => {
 
   const openPicker = async (selectType) => {
     const result = await DocumentPicker.getDocumentAsync
-    ({
-      type: selectType === 'image'
-       ? ['image/png', 'image/jpg']
-       : ['video/mp4', 'video/gif']
-    })
+      ({
+        type: selectType === 'image'
+          ? ['image/png', 'image/jpg']
+          : ['video/mp4', 'video/gif']
+      })
 
-    if(!result.canceled) {
-      if(selectType === 'image') {
-        setForm({...form, thumbnail: result.assets[0] })
+    if (!result.canceled) {
+      if (selectType === 'image') {
+        setForm({ ...form, thumbnail: result.assets[0] })
       }
-      if(selectType === 'video') {
-        setForm({...form, video: result.assets[0] })
+      if (selectType === 'video') {
+        setForm({ ...form, video: result.assets[0] })
       }
     }
     else {
@@ -42,6 +43,26 @@ const Create = () => {
 
   const submit = () => {
 
+    if (!form.prompt || !form.title || !form.thumbnail || !form.video) {
+      return Alert.alert('Please fill in all the feilds')
+    }
+
+    setUploading(true);
+
+    try {
+      Alert.alert('Success', 'Post uploaded successfully')
+      router.push('/home')
+    } catch (error) {
+      Alert.alert('Error', error.message)
+    } finally {
+      setForm({
+        title: '',
+        video: null,
+        thumbnail: null,
+        prompt: ''
+      })
+      setUploading(false);
+    }
   }
 
   return (
@@ -92,7 +113,7 @@ const Create = () => {
           </Text>
           <TouchableOpacity onPress={() => openPicker('image')} >
             {form.thumbnail ? (
-              <Image 
+              <Image
                 source={{ uri: form.thumbnail.uri }}
                 resizeMode='cover'
                 className="w-full h-64 rounded-2xl"
@@ -100,14 +121,14 @@ const Create = () => {
             ) : (
               <View className="w-full h-16 ps-4 bg-black-100 rounded-2xl
                justify-center items-center border-2 border-black-200 flex-row space-x-2">
-                  <Image
-                    source={icons.upload}
-                    resizeMode='contain'
-                    className="w-5 h-5"
-                  />
-                  <Text className="text-sm text-gray-100 font-pmedium">
-                    Choose a file
-                  </Text>
+                <Image
+                  source={icons.upload}
+                  resizeMode='contain'
+                  className="w-5 h-5"
+                />
+                <Text className="text-sm text-gray-100 font-pmedium">
+                  Choose a file
+                </Text>
               </View>
             )}
           </TouchableOpacity>
@@ -121,7 +142,7 @@ const Create = () => {
           otherStyles="mt-7"
         />
 
-        <CustomButton 
+        <CustomButton
           title="Submit & Publish"
           handlePress={submit}
           containerStyles="mt-7"
