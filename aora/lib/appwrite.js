@@ -174,10 +174,20 @@ export const getFilePreview = async (fileId, type) => {
     let fileUrl;
 
     try {
-        
+        if(type === 'video'){
+            fileUrl = storage.getFileView(storageId, fileId)
+        } else if(type === 'image') {
+            fileUrl = storage.getFilePreview(storageId, fileId, 2000, 2000, 'top', 100)           
+        } else {
+            throw new Error('Invalid file type')
+        }
     } catch (error) {
-        
+        throw new Error(error);
     }
+
+    if(!fileUrl) throw new Error;
+
+    return fileUrl;
 }
 
 export const uploadFile = async (file, type) => {
@@ -207,6 +217,18 @@ export const createVideo = async (form) => {
             uploadFile(form.thumbnail, 'image'),
             uploadFile(form.video, 'video')
         ])
+
+        const newPost = await databases.createDocument(
+            databaseId, videoCollectionId, ID.unique(), {
+                title: form.title,
+                thumbnail: thumbnailUrl,
+                video: videoUrl,
+                prompt: form.prompt,
+                creator: form.userId
+            }
+        )
+
+        return newPost;
     } catch (error) {
         throw new Error(error);
     }
