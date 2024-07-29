@@ -105,7 +105,8 @@ export const getAllPosts = async () => {
     try {
         const posts = await databases.listDocuments(
             databaseId,
-            videoCollectionId
+            videoCollectionId,
+            [Query.orderDesc('$createdAt')]
         )
         return posts.documents;
 
@@ -149,7 +150,7 @@ export const getUserPost = async (userId) => {
       const posts = await databases.listDocuments(
         databaseId,
         videoCollectionId,
-        [Query.equal("creator", userId)]
+        [Query.equal("creator", userId), Query.orderDesc('$createdAt')]
       );
   
       if (!posts) throw new Error("Something went wrong");
@@ -193,8 +194,12 @@ export const getFilePreview = async (fileId, type) => {
 export const uploadFile = async (file, type) => {
     if (!file) return;
 
-    const { mimeType, ...rest } = file;
-    const asset = { type: mimeType, ...rest };
+    const asset = {
+        name: file.filename,
+        type: file.mimeType,
+        size: file.fileSize,
+        uri: file.uri,
+    };
 
     try {
         const uploadFile = await storage.createFile(
