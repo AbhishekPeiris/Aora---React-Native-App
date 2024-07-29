@@ -193,8 +193,12 @@ export const getFilePreview = async (fileId, type) => {
 export const uploadFile = async (file, type) => {
     if (!file) return;
 
-    const { mimeType, ...rest } = file;
-    const asset = { type: mimeType, ...rest };
+    const asset = {
+        name: file.filename,
+        type: file.mimeType,
+        size: file.fileSize,
+        uri: file.uri,
+    };
 
     try {
         const uploadFile = await storage.createFile(
